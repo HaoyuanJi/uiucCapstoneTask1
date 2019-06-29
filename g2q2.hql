@@ -5,10 +5,11 @@ DROP TABLE IF EXISTS g2q2;
 CREATE TABLE g2q2 (
   airport string, dest string, averageDelay double
 ) 
-row format delimited fields terminated by ',' 
-lines terminated by '\n' 
-STORED AS TEXTFILE
-LOCATION 's3://myuiuccca/capstoneTask1/results/g2q2/';
+STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
+TBLPROPERTIES(
+    "dynamodb.table.name" = "g2q2",
+    "dynamodb.column.mapping"="airport:Airport,dest:Dest,averageDelay:AverageDelay"
+);
 
 INSERT OVERWRITE TABLE g2q2
 select Origin, Dest, totalDelayCountPerDest/totalFlightCountPerDest AS averageDelayRatePerDest
