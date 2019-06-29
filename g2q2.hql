@@ -2,7 +2,7 @@ use uiuccapstonedb;
 
 DROP TABLE IF EXISTS g2q2;
 
-CREATE TABLE g2q2 (
+CREATE EXTERNAL TABLE g2q2 (
   airport string, dest string, averageDelay double
 ) 
 STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
