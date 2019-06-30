@@ -3,19 +3,19 @@ use uiuccapstonedb;
 DROP TABLE IF EXISTS g3q2;
 
 CREATE EXTERNAL TABLE g3q2 (
-  itenarary string, flightDate string, allFlightNum string, totalDelay double
+  itenarary string, allFlightNum string, flightDate string, totalDelay double
 ) 
 STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
 TBLPROPERTIES(
     "dynamodb.table.name" = "g3q2",
-    "dynamodb.column.mapping"="itenarary:Itenarary,flightDate:FlightDate,allFlightNum:AllFlightNum,totalDelay:TotalDelay"
+    "dynamodb.column.mapping"="itenarary:Itenarary,allFlightNum:AllFlightNum,flightDate:FlightDate,totalDelay:TotalDelay"
 );
 
 INSERT OVERWRITE TABLE g3q2
  select *
  from 
  (
-select concat(a.Origin, "-", a.Dest, "-", b.Dest) AS Itinerary, a.FlightDate AS FlightDate, concat(a.FlightNum,"-",b.FlightNum) AS AllFlightNumber, a.ArrDelayMinutes+b.ArrDelayMinutes AS TotalDelay
+select concat(a.Origin, "-", a.Dest, "-", b.Dest) AS Itinerary, concat(a.FlightNum,"-",b.FlightNum) AS AllFlightNumber, a.FlightDate AS FlightDate, a.ArrDelayMinutes+b.ArrDelayMinutes AS TotalDelay
 from
 (select FlightNum,Origin,Dest,CAST(FlightDate AS date),CRSDepTime,ArrDelayMinutes
  from airline2008 
