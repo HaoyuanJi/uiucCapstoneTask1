@@ -2,7 +2,7 @@ create database if not exists uiucCapstoneDB;
 
 use uiucCapstoneDB;
 
-create table if not exists airlineOnTime (
+create table if not exists airline2008 (
 	Year string,
 	Quarter string,
 	Month string,
