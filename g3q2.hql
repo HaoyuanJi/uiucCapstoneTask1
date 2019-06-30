@@ -3,12 +3,12 @@ use uiuccapstonedb;
 DROP TABLE IF EXISTS g3q2;
 
 CREATE EXTERNAL TABLE g3q2 (
-  itenarary string, allFlightNum string, flightDate string, totalDelay double
+  itinarary string, allFlightNum string, flightDate string, totalDelay double
 ) 
 STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
 TBLPROPERTIES(
     "dynamodb.table.name" = "g3q2",
-    "dynamodb.column.mapping"="itenarary:Itenarary,allFlightNum:AllFlightNum,flightDate:FlightDate,totalDelay:TotalDelay"
+    "dynamodb.column.mapping"="itinarary:Itinerary,allFlightNum:AllFlightNum,flightDate:FlightDate,totalDelay:TotalDelay"
 );
 
 INSERT OVERWRITE TABLE g3q2
