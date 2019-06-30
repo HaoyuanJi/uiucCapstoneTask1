@@ -12,7 +12,7 @@ TBLPROPERTIES(
 );
 
 INSERT OVERWRITE TABLE g3q2
- select *
+ select Itinerary,AllFlightNumber,FlightDate,TotalDelay
  from 
  (
 select concat(a.Origin, "-", a.Dest, "-", b.Dest) AS Itinerary, concat(a.FlightNum,"-",b.FlightNum) AS AllFlightNumber, a.FlightDate AS FlightDate, a.ArrDelayMinutes+b.ArrDelayMinutes AS TotalDelay
