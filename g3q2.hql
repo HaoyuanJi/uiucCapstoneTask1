@@ -3,16 +3,19 @@ use uiuccapstonedb;
 DROP TABLE IF EXISTS g3q2;
 
 CREATE EXTERNAL TABLE g3q2 (
-  itenarary string, flightDate string, firstFlightNum string, secondFlightNum string, totalDelay double
+  itenarary string, flightDate string, allFlightNum string, totalDelay double
 ) 
 STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
 TBLPROPERTIES(
     "dynamodb.table.name" = "g3q2",
-    "dynamodb.column.mapping"="itenarary:Itenarary,flightDate:FlightDate,firstFlightNum:FirstFlightNum,secondFlightNum:SecondFlightNum,totalDelay:TotalDelay"
+    "dynamodb.column.mapping"="itenarary:Itenarary,flightDate:FlightDate,allFlightNum:AllFlightNum,totalDelay:TotalDelay"
 );
 
 INSERT OVERWRITE TABLE g3q2
-select concat(a.Origin, "-", a.Dest, "-", b.Dest) AS Itinerary, a.FlightDate AS FlightDate, a.FlightNum, b.FlightNum,a.ArrDelayMinutes+b.ArrDelayMinutes AS TotalDelay
+ select *
+ from 
+ (
+select concat(a.Origin, "-", a.Dest, "-", b.Dest) AS Itinerary, a.FlightDate AS FlightDate, concat(a.FlightNum,"-",b.FlightNum) AS AllFlightNumber, a.ArrDelayMinutes+b.ArrDelayMinutes AS TotalDelay
 from
 (select FlightNum,Origin,Dest,CAST(FlightDate AS date),CRSDepTime,ArrDelayMinutes
  from airline2008 
@@ -28,4 +31,6 @@ from
  AND (FlightDate="2008-04-05" OR FlightDate="2008-09-11" OR FlightDate="2008-01-06" OR FlightDate="2008-12-09" OR FlightDate="2008-10-08" OR FlightDate="2008-01-03")) b on a.Dest=b.Origin
  where
  b.FlightDate=date_add(a.FlightDate,2)
+ )info
+ where (Itinerary="\"CMI\"-\"ORD\"-\"LAX\"" OR Itinerary="\"JAX\"-\"DFW\"-\"CRP\"" OR Itinerary="\"SLC\"-\"BFL\"-\"LAX\"" OR Itinerary="\"LAX\"-\"SFO\"-\"PHX\"" OR Itinerary="\"DFW\"-\"ORD\"-\"DFW\"" OR Itinerary="\"LAX\"-\"ORD\"-\"JFK\"")
  order by Itinerary,FlightDate,TotalDelay;
